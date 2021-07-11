@@ -1,9 +1,13 @@
 // Importing the necessary files and setting them to a const variable
 const inquirer = require('inquirer');
 const fs = require('fs');
+const employee = require('./lib/Employee');
+const manager = require('./lib/Manager');
+const engineer = require('./lib/Engineer');
+const intern = require('./lib/Intern');
 
 console.log('Please build your team');
-inquirer.prompt([
+const initialQuestions = [
     {
         type: 'input',
         message: `What is the team manager's name?`,
@@ -24,4 +28,4 @@ inquirer.prompt([
         message: `What is the team manager's office number?`,
         name: 'manager-office'
     }
-]);
+];
