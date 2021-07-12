@@ -12,36 +12,82 @@ const initialQuestions = [
     {
         type: 'input',
         message: "What is the team manager's name?",
-        name: 'manager-name'
+        name: 'managerName'
     },
     {
         type: 'input',
         message: "What is the team manager's id?",
-        name: 'manager-id'
+        name: 'managerId'
     },
     {
         type: 'input',
         message: "What is the team manager's e-mail?",
-        name: 'manager-email'
+        name: 'managerEmail'
     },
     {
         type: 'input',
         message: "What is the team manager's office number?",
-        name: 'manager-office'
+        name: 'managerOffice'
     },
     {
         type: 'list',
         message: 'Which type of team member would you like to add?',
-        name: 'team-memeber',
+        name: 'teamMember',
         choices: ['Engineer', 'Intern', "I don't want to add anymore team members"]
     }
     
 ];
 
+const engineerQuestions = [
+
+    {
+        type: 'input',
+        message: "What is your engineer's name?",
+        name: 'engineerName'
+    },
+    {
+        type: 'input',
+        message: "What is your engineer's id?",
+        name: 'engineerId'
+    },
+    {
+        type: 'input',
+        message: "What is your engineer's e-mail?",
+        name: 'engineerEmail'
+    },
+    {
+        type: 'input',
+        message: "What is your engineer's GitHub username?",
+        name: 'engineerGithub'
+    },
+    {
+        type: 'list',
+        message: 'Which type of team member would you like to add?',
+        name: 'teamMember',
+        choices: ['Engineer', 'Intern', "I don't want to add anymore team members"]
+    }
+
+]
+
 function init() {
 
-    inquirer.prompt(initialQuestions);
-
+    inquirer.prompt(initialQuestions)
+    .then((res) => {
+        if (res.teamMember == 'Engineer') {
+            engineerPrompt();
+        }
+    })
 }
+
+function engineerPrompt() {
+    
+    inquirer.prompt(engineerQuestions)
+    .then((res) => {
+        if (res.teamMember == 'Intern') {
+            internPrompt();
+        }
+    })
+
+} 
 
 init();
