@@ -69,12 +69,71 @@ const engineerQuestions = [
 
 ]
 
+const internQuestions = [
+
+    {
+        type: 'input',
+        message: "What is your intern's name?",
+        name: 'internName'
+    },
+    {
+        type: 'input',
+        message: "What is your intern's id?",
+        name: 'internId'
+    },
+    {
+        type: 'input',
+        message: "What is your intern's e-mail?",
+        name: 'internEmail'
+    },
+    {
+        type: 'input',
+        message: "What is your intern's school?",
+        name: 'internSchool'
+    },
+    {
+        type: 'list',
+        message: 'Which type of team member would you like to add?',
+        name: 'teamMember',
+        choices: ['Engineer', 'Intern', "I don't want to add anymore team members"]
+    }
+
+]
+
+const createHTML = (res) =>
+    `<!DOCTYPE html>
+    <html lang="en">
+    <head>
+      <meta charset="UTF-8">
+      <meta http-equiv="X-UA-Compatible" content="ie=edge">
+      <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+      <title>Team Profile</title>
+    </head>
+    <body>
+      <div class="jumbotron jumbotron-fluid">
+      <div class="container">
+        <h1 class="display-4">Hi! My name is ${res.internName}</h1>
+        <p class="lead">I am from ${res.engineerId}.</p>
+        <h3>Example heading <span class="badge badge-secondary">Contact Me</span></h3>
+        <ul class="list-group">
+          <li class="list-group-item">My GitHub username is ${res.managerEmail}</li>
+          <li class="list-group-item">LinkedIn: ${res.teamMember}</li>
+        </ul>
+      </div>
+    </div>
+    </body>
+    </html>`;
+
 function init() {
 
     inquirer.prompt(initialQuestions)
     .then((res) => {
         if (res.teamMember == 'Engineer') {
             engineerPrompt();
+        } else if (res.teamMember == 'Intern') {
+            internPrompt();
+        } else {
+            generateHTML();
         }
     })
 }
@@ -85,9 +144,33 @@ function engineerPrompt() {
     .then((res) => {
         if (res.teamMember == 'Intern') {
             internPrompt();
+        } else if (res.teamMember == 'Engineer') {
+            engineerPrompt();
+        } else {
+            generateHTML();
         }
     })
 
-} 
+}
+
+function internPrompt() {
+    
+    inquirer.prompt(internQuestions)
+    .then((res) => {
+        if (res.teamMember == "I don't want to add anymore team members") {
+            generateHTML();
+        } else if (res.teamMember == 'Engineer') {
+            internPrompt();
+        } else {
+            engineerPrompt();
+        }
+    })
+
+}
+
+function generateHTML (res) {
+    fs.writeFile('./dist/index.html', createHTML(res));
+    console.log('create html');
+}
 
 init();
