@@ -1,12 +1,22 @@
 // Importing the necessary files and setting them to a const variable
 const inquirer = require('inquirer');
 const fs = require('fs');
-const employee = require('./lib/Employee');
-const manager = require('./lib/Manager');
-const engineer = require('./lib/Engineer');
-const intern = require('./lib/Intern');
+const Manager = require('./lib/Manager');
+const Engineer = require('./lib/Engineer');
+const Intern = require('./lib/Intern');
 
+// Creating an object that will store arrays for each type of team member
+const team = {
+    manager: [],
+    engineers: [],
+    interns: []
+}
+
+// Displaying the welcome message to the user
 console.log('Please build your team');
+
+// The initial questions that the user will be asked to input the manager
+// and at the end will ask if they want to add another team member
 const initialQuestions = [
 
     {
@@ -38,6 +48,8 @@ const initialQuestions = [
     
 ];
 
+// The questions that the user will be asked if they choose to add an engineer
+// and at the end will ask if they want to add another team member
 const engineerQuestions = [
 
     {
@@ -69,6 +81,8 @@ const engineerQuestions = [
 
 ]
 
+// The questions that the user will be asked if they choose to add an intern
+// and at the end will ask if they want to add another team member
 const internQuestions = [
 
     {
@@ -100,6 +114,7 @@ const internQuestions = [
 
 ]
 
+// The base HTML that will be created once the user is done building their team
 const createHTML = (res) =>
     `<!DOCTYPE html>
     <html lang="en">
@@ -124,10 +139,19 @@ const createHTML = (res) =>
     </body>
     </html>`;
 
+// This function is the initialization of the application
+// It will first prompt the user with the initial questions about creating a manager team member
+// After that it will use the user's input values to create a new team manager object from the manager class
+// The object is then pushed into the manager array inside of the team object
+// Then, it will run another function based on whether the user is done building their team or not
 function init() {
 
     inquirer.prompt(initialQuestions)
     .then((res) => {
+
+        let teamManager = new Manager(res.managerName, res.managerId, res.managerEmail, res.managerOffice);
+        team.manager.push(teamManager);
+
         if (res.teamMember == 'Engineer') {
             engineerPrompt();
         } else if (res.teamMember == 'Intern') {
@@ -136,12 +160,21 @@ function init() {
             generateHTML();
         }
     })
+
 }
 
+// This function prompts the user with the engineer questions
+// After that it will use the user's input values to create a new team engineer object from the engineer class
+// The object is then pushed into the engineer array inside of the team object
+// Then, it will run another function based on whether the user is done building their team or not
 function engineerPrompt() {
-    
+
     inquirer.prompt(engineerQuestions)
     .then((res) => {
+
+        let teamEngineer = new Engineer(res.engineerName, res.engineerId, res.engineerEmail, res.engineerGithub);
+        team.engineers.push(teamEngineer);
+
         if (res.teamMember == 'Intern') {
             internPrompt();
         } else if (res.teamMember == 'Engineer') {
@@ -153,10 +186,18 @@ function engineerPrompt() {
 
 }
 
+// This function prompts the user with the intern questions
+// After that it will use the user's input values to create a new team intern object from the intern class
+// The object is then pushed into the intern array inside of the team object
+// Then, it will run another function based on whether the user is done building their team or not
 function internPrompt() {
-    
+
     inquirer.prompt(internQuestions)
     .then((res) => {
+
+        let teamIntern = new Intern(res.internName, res.internId, res.internEmail, res.internSchool);
+        team.interns.push(teamIntern);
+
         if (res.teamMember == "I don't want to add anymore team members") {
             generateHTML();
         } else if (res.teamMember == 'Engineer') {
