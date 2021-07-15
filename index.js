@@ -4,6 +4,7 @@ const fs = require('fs');
 const Manager = require('./lib/Manager');
 const Engineer = require('./lib/Engineer');
 const Intern = require('./lib/Intern');
+const pageTemplate = require('./src/page-template.js');
 
 // Creating an object that will store arrays for each type of team member
 const team = {
@@ -114,31 +115,6 @@ const internQuestions = [
 
 ]
 
-// The base HTML that will be created once the user is done building their team
-const createHTML = (res) =>
-    `<!DOCTYPE html>
-    <html lang="en">
-    <head>
-      <meta charset="UTF-8">
-      <meta http-equiv="X-UA-Compatible" content="ie=edge">
-      <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
-      <title>Team Profile</title>
-    </head>
-    <body>
-      <div class="jumbotron jumbotron-fluid">
-      <div class="container">
-        <h1 class="display-4">Hi! My name is ${res.internName}</h1>
-        <p class="lead">I am from ${res.engineerId}.</p>
-        <h3>Example heading <span class="badge badge-secondary">Contact Me</span></h3>
-        <ul class="list-group">
-          <li class="list-group-item">My GitHub username is ${res.managerEmail}</li>
-          <li class="list-group-item">LinkedIn: ${res.teamMember}</li>
-        </ul>
-      </div>
-    </div>
-    </body>
-    </html>`;
-
 // This function is the initialization of the application
 // It will first prompt the user with the initial questions about creating a manager team member
 // After that it will use the user's input values to create a new team manager object from the manager class
@@ -153,11 +129,14 @@ function init() {
         team.manager.push(teamManager);
 
         if (res.teamMember == 'Engineer') {
+            generateStarterHTML();
             engineerPrompt();
         } else if (res.teamMember == 'Intern') {
+            generateStarterHTML();
             internPrompt();
         } else {
-            generateHTML();
+            generateStarterHTML();
+            appendEndHTML();
         }
     })
 
@@ -168,6 +147,8 @@ function init() {
 // The object is then pushed into the engineer array inside of the team object
 // Then, it will run another function based on whether the user is done building their team or not
 function engineerPrompt() {
+
+    console.log('Add your engineer!');
 
     inquirer.prompt(engineerQuestions)
     .then((res) => {
@@ -180,7 +161,8 @@ function engineerPrompt() {
         } else if (res.teamMember == 'Engineer') {
             engineerPrompt();
         } else {
-            generateHTML();
+            appendEngHTML();
+            appendEndHTML();
         }
     })
 
@@ -198,20 +180,44 @@ function internPrompt() {
         let teamIntern = new Intern(res.internName, res.internId, res.internEmail, res.internSchool);
         team.interns.push(teamIntern);
 
-        if (res.teamMember == "I don't want to add anymore team members") {
-            generateHTML();
-        } else if (res.teamMember == 'Engineer') {
+        if (res.teamMember == "Intern") {
             internPrompt();
-        } else {
+        } else if (res.teamMember == 'Engineer') {
             engineerPrompt();
+        } else {
+            if (res.teamMember == 'Engineer') {
+                appendIntHTML();
+            } else if (res.teamMember == 'Intern') {
+                appendIntHTML();
+            } else {
+                appendIntHTML();
+                appendEndHTML();
+            }
         }
     })
 
 }
 
-function generateHTML (res) {
-    fs.writeFile('./dist/index.html', createHTML(res));
-    console.log('create html');
+// Functions that create and append to the index.html file
+// using the functions declared in page-template.js
+function generateStarterHTML () {
+    fs.writeFile('./dist/index.html', pageTemplate.startHTML(team), (err) => 
+        err ? console.log(err) : console.log(''));
+}
+
+function appendEngHTML () {
+    fs.appendFile('./dist/index.html', pageTemplate.engineerHTML(team), (err) => 
+        err ? console.log(err) : console.log(''));
+}
+
+function appendIntHTML () {
+    fs.appendFile('./dist/index.html', pageTemplate.internHTML(team), (err) => 
+        err ? console.log(err) : console.log(''));
+}
+
+function appendEndHTML () {
+    fs.appendFile('./dist/index.html', pageTemplate.endHTML(team), (err) => 
+        err ? console.log(err) : console.log('Your team profile has been created!'));
 }
 
 init();
