@@ -49,13 +49,13 @@ const internHTML = (team) =>
             `<div class="card">
                 <div class="card-header">
                     <h2 class="card-title">${team.interns[0].name}</h2>
-                    <h3 class="card-text"><i class="fas fa-graduate"></i> Intern</h3>
+                    <h3 class="card-text"><i class="fas fa-user-graduate"></i> Intern</h3>
                 </div>
                 <div class="card-body">
                     <ul class="list-group list-group-flush">
                         <li class="list-group-item">Employee ID: ${team.interns[0].id}</li>
                         <li class="list-group-item">Email: <a href="mailto: ${team.interns[0].email}"> ${team.interns[0].email}</a></li>
-                        <li class="list-group-item">School: <a href= "https://github.com/${team.interns[0].school}" target="_blank">${team.interns[0].school}</a></li>
+                        <li class="list-group-item">School: ${team.interns[0].school}</li>
                     </ul>
                 </div>
             </div>`;

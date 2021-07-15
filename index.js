@@ -157,8 +157,10 @@ function engineerPrompt() {
         team.engineers.push(teamEngineer);
 
         if (res.teamMember == 'Intern') {
+            appendEngHTML();
             internPrompt();
         } else if (res.teamMember == 'Engineer') {
+            appendEngHTML();
             engineerPrompt();
         } else {
             appendEngHTML();
@@ -181,18 +183,14 @@ function internPrompt() {
         team.interns.push(teamIntern);
 
         if (res.teamMember == "Intern") {
+            appendIntHTML();
             internPrompt();
         } else if (res.teamMember == 'Engineer') {
+            appendIntHTML();
             engineerPrompt();
         } else {
-            if (res.teamMember == 'Engineer') {
-                appendIntHTML();
-            } else if (res.teamMember == 'Intern') {
-                appendIntHTML();
-            } else {
-                appendIntHTML();
-                appendEndHTML();
-            }
+            appendIntHTML();
+            appendEndHTML();
         }
     })
 

@@ -13,15 +13,6 @@ describe('Manager', () => {
         })
     })
 
-    describe('getGithub method', () => {
-        it('returns the office number of the Manager', () => {
-            const manager = new Manager('Jim', 1, 'jim@jim.com', '101');
-
-            manager.getName(manager);
-            expect(manager.officeNumber).toEqual('101');
-        })
-    })
-
     describe('getRole method', () => {
         it('returns the role of the Manager', () => {
             const manager = new Manager('Logan', 1, 'logan@logan.com', '101');

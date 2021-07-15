@@ -13,7 +13,7 @@ describe('Intern', () => {
         })
     })
 
-    describe('getGithub method', () => {
+    describe('getSchool method', () => {
         it('returns the school of the Intern', () => {
             const intern = new Intern('Jim', 1, 'jim@jim.com', 'GA Tech');
 
